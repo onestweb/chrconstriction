@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* Wide screens held upright: a tablet in portrait, or a phone in Chrome's
+   "Desktop site" mode (about 980 x 1900). Full-screen heights would
+   stretch into a huge block there, so they are capped with this variant. */
+@custom-variant wide-portrait (@media (min-width: 821px) and (max-aspect-ratio: 1/1));
+
+/* CHR Construction tokens. Values from the client's palette:
+   Royal Navy #1E3173, Construction Red #DD2730, Deep Charcoal #17191E,
+   Cool Off-White #F4F5F7, Pure White #FFFFFF, Steel Grey #E3E6EB,
+   Muted Slate #626A78. */
+:root {
+  --background: #f4f5f7; /* Cool Off-White: the page */
+  --foreground: #17191e; /* Deep Charcoal: headings and text */
+
+  --brand: #1e3173; /* Royal Navy: primary, logo blue */
+  --brand-hover: #16255a;
+  --brand-light: #e7eaf4;
+
+  --accent: #dd2730; /* Construction Red: the action colour */
+  --accent-hover: #bf1d26;
+  --accent-light: #fbe8e9;
+
+  --surface: #ffffff; /* Pure White: cards, navigation */
+  --surface-hover: #eceef2;
+  --white: #ffffff;
+
+  --muted: #626a78; /* Muted Slate: secondary text */
+  --border: #e3e6eb; /* Steel Grey */
+  --border-strong: #c9ced6;
+
+  --header-background: #17191e; /* dark sections, footer */
+  --header-foreground: #ffffff;
+
+  --focus-ring: #dd2730;
+
+  /* Shape: one radius family for frames, media and cards */
+  --radius-frame: 28px;
+  --radius-media: 18px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-light: var(--brand-light);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+
+  --color-white: var(--white);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-header-background: var(--header-background);
+  --color-header-foreground: var(--header-foreground);
+
+  --color-focus-ring: var(--focus-ring);
+
+  /* Typography (variables set in app/layout.tsx) */
+  --font-sans: var(--font-body-face);
+  --font-head: var(--font-heading-face);
+  --font-body: var(--font-body-face);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body-face), sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    /* Clip (not hide) so sticky parts keep working and nothing that
+       slides in from the side can widen the page on phones. */
+    overflow-x: clip;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body-face), sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading-face), sans-serif;
+    font-weight: 600;
+    font-stretch: 88%;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  .f-head {
+    font-family: var(--font-heading-face), sans-serif;
+    font-stretch: 88%;
+  }
+
+  .f-body {
+    font-family: var(--font-body-face), sans-serif;
+  }
+
+  .rounded-frame {
+    border-radius: var(--radius-frame);
+  }
+
+  .rounded-media {
+    border-radius: var(--radius-media);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* A CSS reveal used with useInView: [data-shown="true"] on the parent. */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.9s cubic-bezier(0.32, 0.72, 0, 1);
+  transition-delay: calc(var(--d, 0) * 80ms);
+}
+[data-shown="true"] .reveal-up,
+.reveal-up[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Without JavaScript nothing waits to be revealed. */
+@media (scripting: none) {
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+  }
+}
